@@ -1,8 +1,21 @@
+using TomadaStore.ProductAPI.Data;
+using TomadaStore.ProductAPI.Repository;
+using TomadaStore.ProductAPI.Repository.Interfaces;
+using TomadaStore.ProductAPI.Services;
+using TomadaStore.ProductAPI.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDB"));
+builder.Services.AddScoped<ConnectionDB>();
+
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 

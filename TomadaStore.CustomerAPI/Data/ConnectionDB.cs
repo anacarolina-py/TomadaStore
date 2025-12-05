@@ -1,4 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using TomadaStore.Models.Models;
+using TomadaStore.ProductAPI.Data;
 
 namespace TomadaStore.CustomerAPI.Data
 
@@ -16,5 +20,7 @@ namespace TomadaStore.CustomerAPI.Data
         {
             return new SqlConnection(_connectionString);
         }
+
+
     }
 }
