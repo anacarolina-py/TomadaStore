@@ -7,13 +7,17 @@ namespace TomadaStore.Models.Models
         public ObjectId Id { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public Category(string id, string name, string description)
+        public Category(string name, string description)
         {
-            Id = ObjectId.Parse(id);
+            Id = ObjectId.GenerateNewId();
             Name = name;
             Description = description;
         }
 
-       
+        Category()
+        {
+            
+        }
+
     }
 }

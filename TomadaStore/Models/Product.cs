@@ -8,21 +8,19 @@ namespace TomadaStore.Models.Models
 {
     public class Product
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public decimal Price { get; private set; }
         public Category Category { get; private set; }
-        public Product(string name, string description, decimal price, Category category)
+       public Product()
         {
-            Name = name;
-            Description = description;
-            Price = price;
-            Category = category;
         }
-       public Product(string id, string name, string description, decimal price, Category category)
+        public Product(ObjectId id, string name, string description, decimal price, Category category)
         {
-            Id = ObjectId.Parse(id);
+            Id = Id;
             Name = name;
             Description = description;
             Price = price;
