@@ -14,7 +14,6 @@ namespace TomadaStore.SaleAPI.Services.v2
     {
         private readonly ConnectionFactory _factory;
         private readonly ILogger<SaleProduceService> _logger;
-        
 
         public SaleProduceService(ILogger<SaleProduceService> logger)
         {

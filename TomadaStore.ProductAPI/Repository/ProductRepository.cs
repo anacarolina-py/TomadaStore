@@ -25,19 +25,18 @@ namespace TomadaStore.ProductAPI.Repository
         {
             try
             {
-                await _productCollection.InsertOneAsync(new Product
-                (
-                   product.ToString(),
-                   product.Name,
-                   product.Description,
-                   product.Price,
-                   new Category
-                   (
-                       product.ToString(),
-                       product.Category.Name,
-                       product.Category.Description
-                   )
-                ));
+                var category = new Category(
+                    product.Category.Name,
+                    product.Category.Description
+                    );
+                var newProduct = new Product(
+                    product.Id,
+                    product.Name,
+                    product.Description,
+                    product.Price,
+                    category
+                    );
+                await _productCollection.InsertOneAsync(newProduct);
             }
             catch (Exception ex)
             {
@@ -50,7 +49,13 @@ namespace TomadaStore.ProductAPI.Repository
         {
             try
             {
-                await _productCollection.DeleteOneAsync(id);
+                var objectId = ObjectId.Parse(id);
+                var deleteResult = await _productCollection.DeleteOneAsync(p => p.Id == objectId);
+
+                if (deleteResult.DeletedCount == 0)
+                {
+                    _logger.LogWarning($"No product found with ID {id} to delete.");
+                }
             }
             catch (Exception ex)
             {
@@ -61,8 +66,9 @@ namespace TomadaStore.ProductAPI.Repository
 
         public async Task<List<ProductResponseDTO>> GetAllProductsAsync()
         {
-           var products = await _productCollection.Find(_ => true).ToListAsync();
-            return products.ConvertAll(product => new ProductResponseDTO
+            var products = await _productCollection.Find(_ => true).ToListAsync();
+
+            return products.Select(product => new ProductResponseDTO
             {
                 Id = product.Id.ToString(),
                 Name = product.Name,
@@ -74,7 +80,7 @@ namespace TomadaStore.ProductAPI.Repository
                     Name = product.Category.Name,
                     Description = product.Category.Description
                 }
-            });
+            }).ToList();
 
         }
 
@@ -107,7 +113,34 @@ namespace TomadaStore.ProductAPI.Repository
 
         public async Task UpdateProductAsync(string id, ProductRequestDTO product)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var objectId = ObjectId.Parse(id);
+
+                var category = new Category(
+                    product.Category.Name,
+                    product.Category.Description
+                    );
+                var updatedProduct = new Product(
+                    product.Id,
+                    product.Name,
+                    product.Description,
+                    product.Price,
+                    category
+                    );
+                var updateResult = await _productCollection.ReplaceOneAsync
+                    (p => p.Id == objectId, updatedProduct);
+
+                if (updateResult.MatchedCount == 0)
+                {
+                    _logger.LogWarning($"No product found with ID {id} to update.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating product with ID {id}: {ex.Message}");
+                throw;
+            }
         }
     }
 }

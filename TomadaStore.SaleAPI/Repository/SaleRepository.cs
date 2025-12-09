@@ -1,10 +1,12 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using TomadaStore.Models.DTOs.Customer;
 using TomadaStore.Models.DTOs.Product;
 using TomadaStore.Models.DTOs.Sale;
 using TomadaStore.Models.Models;
 using TomadaStore.SaleAPI.Data;
 using TomadaStore.SaleAPI.Repository.Interfaces;
+using TomadaStore.SaleAPI.Services.v1.Interfaces;
 
 namespace TomadaStore.SaleAPI.Repository
 {
@@ -22,44 +24,36 @@ namespace TomadaStore.SaleAPI.Repository
         }
 
         public async Task CreateSaleAsync(CustomerResponseDTO customerDto, 
-            ProductResponseDTO productDto, SaleRequestDTO salaeDto)
+            List<ProductResponseDTO> productDto, decimal total)
         {
             try
             {
-                var products = new List<Product>();
-
-                var category = new Category
-                (
-                    productDto.Category.ToString(),
-                    productDto.Category.Name,
-                    productDto.Category.Description
-                );
-                var product = new Product
-                (
-                    productDto.Id,
-                    productDto.Name,
-                    productDto.Description,
-                    productDto.Price,
-                    category
-                );
-
-                products.Add(product);
-
-                var customer = new Customer
-                (
+                var customer = new Customer(
                     customerDto.Id,
                     customerDto.FirstName,
                     customerDto.LastName,
                     customerDto.Email,
-                    customerDto.PhoneNumber);
+                    customerDto.PhoneNumber
+                );
 
-                await _saleCollection.InsertOneAsync(new Sale
-                (
-                   customer, 
-                   products,
-                   productDto.Price
+                var products = productDto.Select(p => new Product(
+                    new ObjectId( p.Id ),
+                    p.Name,
+                    p.Description,
+                    p.Price,
+                    new Category(
+                        p.Category.Name,
+                        p.Category.Description)
 
-                ));
+                )).ToList();
+
+                var sale = new Sale(
+                    customer,
+                    products,
+                    total
+                );
+                await _saleCollection.InsertOneAsync(sale);
+
             }
            catch (Exception ex)
             {
