@@ -31,6 +31,7 @@
             LastName = lastName;
             Email = email;
             PhoneNumber = phoneNumber;
+            IsActive = true;
         }
     }
 }

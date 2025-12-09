@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>297782a2-161c-4752-b56a-790fbc38a35a</UserSecretsId>
+    <UserSecretsId>a2811d54-6c07-4439-9db2-c57f1d311255</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TomadaStore.SaleAPI\TomadaStore.SaleAPI.csproj" />
     <ProjectReference Include="..\TomadaStore\TomadaStore.Models.csproj" />
   </ItemGroup>
 

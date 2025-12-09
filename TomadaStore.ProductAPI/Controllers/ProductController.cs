@@ -40,7 +40,7 @@ namespace TomadaStore.ProductAPI.Controllers
             {
                 _logger.LogInformation("Creating a new product.");
                 await _productService.CreateProductAsync(product);
-                return Created();
+                return StatusCode(201);
             }
             catch (Exception ex)
             {
@@ -49,7 +49,7 @@ namespace TomadaStore.ProductAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult> GetProductById(string id)
         {
             try
@@ -69,24 +69,35 @@ namespace TomadaStore.ProductAPI.Controllers
             }
         }
 
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult> DeleteProduct(string id)
-        //{
-        //    try
-        //    {
-        //        _logger.LogInformation($"Deleting product with ID: {id}");
-        //        var result = await _productService.DeleteProductAsync(id);
-        //        if (!result)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return NoContent();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, $"Error occurred while deleting product with ID: {id}. " + ex.Message);
-        //        return Problem(ex.Message);
-        //    }
-        //}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateProductAsync(string id, [FromBody] ProductRequestDTO product)
+        {
+            try
+            {
+                _logger.LogInformation($"Updating product with ID: {id}");
+                await _productService.UpdateProductAsync(id, product);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while updating product with ID: {id}. " + ex.Message);
+                return Problem(ex.Message);
+            }
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteProduct(string id)
+        {
+            try
+            {
+                _logger.LogInformation($"Deleting product with ID: {id}");
+                await _productService.DeleteProductAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while deleting product with ID: {id}. " + ex.Message);
+                return Problem(ex.Message);
+            }
+        }
     }
 }

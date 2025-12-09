@@ -70,7 +70,15 @@ namespace TomadaStore.ProductAPI.Services
 
         public async Task UpdateProductAsync(string id, ProductRequestDTO product)
         {
-            
+            try
+            {
+                 await _productRepository.UpdateProductAsync(id, product);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating product with ID {id}: {ex.Message}");
+                throw;
+            }
         }
     }
 }
