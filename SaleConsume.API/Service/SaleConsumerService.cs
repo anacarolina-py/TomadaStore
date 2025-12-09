@@ -2,13 +2,15 @@
 using RabbitMQ.Client.Events;
 using SaleConsume.API.Repository;
 using SaleConsume.API.Repository.Interfaces;
+using SaleConsume.API.Service.Interfaces;
 using System.Text;
 using System.Text.Json;
+using TomadaStore.Models.DTOs.Sale;
 using TomadaStore.Models.Models;
 
 namespace SaleConsume.API.Service
 {
-    public class SaleConsumerService
+    public class SaleConsumerService : ISaleConsumerService
     {
         private readonly ISaleConsumerRepository _repository;
         private readonly ConnectionFactory _factory;
@@ -65,6 +67,7 @@ namespace SaleConsume.API.Service
             await channel.BasicConsumeAsync(queue: "sale_queue",
                                             autoAck: true,
                                             consumer: consumer);
+        
 
         }
     } 

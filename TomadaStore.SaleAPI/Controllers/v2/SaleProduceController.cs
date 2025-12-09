@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using TomadaStore.Models.DTOs.Sale;
+using TomadaStore.Models.Models;
 using TomadaStore.SaleAPI.Services.v1.Interfaces;
 using TomadaStore.SaleAPI.Services.v2;
 
@@ -25,8 +26,8 @@ namespace TomadaStore.SaleAPI.Controllers.v2
       
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ProduceSale(SaleProduceService saleProduce)
+        [HttpPost("{customerId}")]
+        public async Task<IActionResult> ProduceSale(int customerId, [FromBody] SaleRequestDTO saleProduce)
         {
             await _saleService.ProduceSaleAsync(saleProduce);
             return Ok("Sale enviada para fila.");

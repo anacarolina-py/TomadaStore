@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using SaleConsume.API.Repository.Interfaces;
+using TomadaStore.Models.DTOs.Sale;
 using TomadaStore.Models.Models;
 using TomadaStore.SaleAPI.Data;
 
 namespace SaleConsume.API.Repository
 {
-    public class SaleConsumerRepository
+    public class SaleConsumerRepository : ISaleConsumerRepository
     {
         private readonly ILogger<SaleConsumerRepository> _logger;
         private readonly ConnectionDB _connection;

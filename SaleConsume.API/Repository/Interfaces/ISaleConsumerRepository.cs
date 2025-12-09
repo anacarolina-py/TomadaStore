@@ -1,4 +1,5 @@
-﻿using TomadaStore.Models.Models;
+﻿using TomadaStore.Models.DTOs.Sale;
+using TomadaStore.Models.Models;
 
 namespace SaleConsume.API.Repository.Interfaces
 {

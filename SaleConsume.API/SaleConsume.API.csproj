@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TomadaStore.SaleAPI\TomadaStore.SaleAPI.csproj" />
     <ProjectReference Include="..\TomadaStore\TomadaStore.Models.csproj" />
   </ItemGroup>
 

@@ -1,15 +1,22 @@
 using SaleConsume.API.Repository;
+using SaleConsume.API.Repository.Interfaces;
 using SaleConsume.API.Service;
-using TomadaStore.SaleAPI.Repository.Interfaces;
+using SaleConsume.API.Service.Interfaces;
+using TomadaStore.SaleAPI.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDB"));
+builder.Services.AddSingleton<ConnectionDB>();
 
-builder.Services.AddScoped<SaleConsumerRepository>();
-builder.Services.AddScoped<SaleConsumerService>();
+builder.Services.AddScoped<ISaleConsumerService, SaleConsumerService>();
+builder.Services.AddScoped<ISaleConsumerRepository, SaleConsumerRepository>();
+
 
 var app = builder.Build();
 

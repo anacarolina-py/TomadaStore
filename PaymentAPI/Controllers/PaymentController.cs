@@ -4,7 +4,7 @@ namespace PaymentAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class PaymentController : ControllerBase
     {
         private static readonly string[] Summaries =
         [
