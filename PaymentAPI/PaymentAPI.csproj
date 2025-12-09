@@ -4,19 +4,12 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>a2811d54-6c07-4439-9db2-c57f1d311255</UserSecretsId>
+    <UserSecretsId>9e78d618-840a-4f19-918d-1fa0fcfe8a1c</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
-    <PackageReference Include="MongoDB.Driver" Version="3.5.2" />
-    <PackageReference Include="RabbitMQ.Client" Version="7.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\TomadaStore.SaleAPI\TomadaStore.SaleAPI.csproj" />
-    <ProjectReference Include="..\TomadaStore\TomadaStore.Models.csproj" />
   </ItemGroup>
 
 </Project>

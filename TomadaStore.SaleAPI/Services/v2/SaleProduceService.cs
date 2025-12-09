@@ -1,4 +1,8 @@
-﻿using TomadaStore.Models.DTOs.Customer;
+﻿using RabbitMQ.Client;
+using RabbitMQ.Client.Exceptions;
+using System.Text;
+using System.Text.Json;
+using TomadaStore.Models.DTOs.Customer;
 using TomadaStore.Models.DTOs.Product;
 using TomadaStore.Models.DTOs.Sale;
 using TomadaStore.SaleAPI.Repository.Interfaces;
@@ -6,55 +10,38 @@ using TomadaStore.SaleAPI.Services.v1.Interfaces;
 
 namespace TomadaStore.SaleAPI.Services.v2
 {
-    public class SaleProduceService : ISaleService
+    public class SaleProduceService
     {
-        private readonly ISaleRepository _saleRepository;
+        private readonly ConnectionFactory _factory;
         private readonly ILogger<SaleProduceService> _logger;
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly HttpClient _httpClientProduct;
-        private readonly HttpClient _httpClientCustomer;
 
-       public SaleProduceService(ILogger<SaleProduceService> logger, 
-           ISaleRepository saleRepository, 
-           IHttpClientFactory httpClientFactory)
+        public SaleProduceService(ILogger<SaleProduceService> logger)
         {
             _logger = logger;
-            _saleRepository = saleRepository;
-            _httpClientProduct = httpClientFactory.CreateClient("ProductAPI");
-            _httpClientCustomer = httpClientFactory.CreateClient("CustomerAPI");
-
+            _factory = new ConnectionFactory
+            {
+                HostName = "localhost"
+            };
         }
-       
-        public async Task CreateSaleAsync(int idCustomer, SaleRequestDTO saleDto)
+        public async Task ProduceSaleAsync(object sale)
         {
-               var customer = await _httpClientCustomer.GetFromJsonAsync<CustomerResponseDTO>(idCustomer.ToString());
+            string message = JsonSerializer.Serialize(sale);
+            var body = Encoding.UTF8.GetBytes(message);
 
-                if (customer == null)
-                {
-                    _logger.LogWarning($"Customer with ID {idCustomer} not found.");
-                    throw new Exception("Customer not found.");
-                }
-                var products = new List<ProductResponseDTO>();
-                decimal totalPrice = 0;
+            using var connection = await _factory.CreateConnectionAsync();
+            using var channel = await connection.CreateChannelAsync();
 
-                foreach (var saleProduct in saleDto.Products)
-                {
-                    var product = await _httpClientProduct.GetFromJsonAsync<ProductResponseDTO>
-                        (saleProduct.ProductId.ToString());
+            await channel.QueueDeclareAsync(queue: "sale_queue",
+                                            durable: false,
+                                            exclusive: false,
+                                            autoDelete: false,
+                                            arguments: null);
 
-                    if (product == null)
-                    {
-                        _logger.LogWarning($"Product with ID {saleProduct.ProductId} not found.");
-                        throw new Exception($"Product with ID {saleProduct.ProductId} not found.");
-                    }
+            await channel.BasicPublishAsync(exchange: string.Empty,
+                                            routingKey: "sale_queue",
+                                            body: body);
 
-                    totalPrice += product.Price * saleProduct.Quantity;
-                    products.Add(product);
-                }
-                await _saleRepository.CreateSaleAsync(customer, products, totalPrice);
-           
+            _logger.LogInformation($"[x] Sale enviada para fila.");
         }
-
-        
     }
 }

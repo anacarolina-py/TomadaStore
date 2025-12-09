@@ -20,7 +20,7 @@ namespace TomadaStore.Models.Models
         }
         public Product(ObjectId id, string name, string description, decimal price, Category category)
         {
-            Id = Id;
+            Id = id;
             Name = name;
             Description = description;
             Price = price;

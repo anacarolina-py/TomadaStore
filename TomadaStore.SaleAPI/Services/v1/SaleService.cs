@@ -10,7 +10,6 @@ namespace TomadaStore.SaleAPI.Services.v1
     {
         private readonly ISaleRepository _saleRepository;
         private readonly ILogger<SaleService> _logger;
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClient _httpClientProduct;
         private readonly HttpClient _httpClientCustomer;
 

@@ -12,6 +12,7 @@ namespace TomadaStore.Models.Models
         public List<Product> Products { get; private set; }
         public DateTime SaleDate { get; private set; }
         public decimal TotalPrice { get; private set; }
+        public string Status { get; private set;  }
 
         public Sale(Customer customer, List<Product> products, decimal totalPrice)
         {
@@ -20,6 +21,7 @@ namespace TomadaStore.Models.Models
             Products = products;
             SaleDate = DateTime.UtcNow;
             TotalPrice = totalPrice;
+            Status = "Pending";
         }
     }
 }
