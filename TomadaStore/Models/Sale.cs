@@ -14,6 +14,10 @@ namespace TomadaStore.Models.Models
         public decimal TotalPrice { get; private set; }
         public string Status { get; private set;  }
 
+        public void setStatus(string status)
+        {
+            Status = status;
+        }
         public Sale(Customer customer, List<Product> products, decimal totalPrice)
         {
             Id = ObjectId.GenerateNewId();

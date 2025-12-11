@@ -31,7 +31,7 @@ namespace SaleConsume.API.Service
             var connection = await _factory.CreateConnectionAsync();
             var channel = await connection.CreateChannelAsync();
 
-            await channel.QueueDeclareAsync(queue: "sale_queue",
+            await channel.QueueDeclareAsync(queue: "saleprocessed_queue",
                                             durable: false,
                                             exclusive: false,
                                             autoDelete: false,
@@ -64,7 +64,7 @@ namespace SaleConsume.API.Service
                     _logger.LogInformation($"Erro ao processar mensagem {ex.Message}");
                 }
             };
-            await channel.BasicConsumeAsync(queue: "sale_queue",
+            await channel.BasicConsumeAsync(queue: "saleprocessed_queue",
                                             autoAck: true,
                                             consumer: consumer);
         

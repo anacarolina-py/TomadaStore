@@ -25,10 +25,8 @@ namespace SaleConsume.API.Controllers
         public async Task<IActionResult> ConsumeSale()
         {
             await _saleConsumerService.NewSaleAsync();
-            return Ok("Iniciando");
+            return Ok("Fila Salva no Banco.");
         }
-
-       
 
     }
 }

@@ -10,6 +10,8 @@ namespace TomadaStore.Models.DTOs.Sale
     {
         [Required]
         public List<SaleProductDTO> Products { get; set; }
+        public string Status { get; set; }
+        public decimal? TotalPrice { get; set; }
 
     }
 }

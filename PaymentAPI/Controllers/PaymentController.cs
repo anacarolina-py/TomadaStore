@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PaymentAPI.Service;
 
 namespace PaymentAPI.Controllers
 {
@@ -6,21 +7,20 @@ namespace PaymentAPI.Controllers
     [Route("[controller]")]
     public class PaymentController : ControllerBase
     {
-        private static readonly string[] Summaries =
-        [
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        ];
-
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        private readonly PaymentService _paymentService;
+        
+        public PaymentController(PaymentService paymentService)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            _paymentService = paymentService;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetQueueAsync()
+        {
+            await _paymentService.GetQueueAsync();
+            return Ok();
+        }
+
+        
     }
 }
